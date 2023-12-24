@@ -2,7 +2,8 @@ import {
   SimulationCohortSummaries,
   SimulationModuleInfo,
 } from "../data/globalData";
-import { SimulationModuleActivity, StudentSummaries } from "../data/moduleData";
+import { SimulationModuleActivity } from "../data/simulationModuleActivity";
+import { StudentSummaries } from "../data/studentSummaries";
 
 export function generateStats(selectedProduct, selectedCourse) {
   if (selectedCourse.length === 0) {
