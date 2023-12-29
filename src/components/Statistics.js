@@ -32,16 +32,17 @@ export default function Statistics() {
     const value =
       Math.floor(totalMinutes / 60) === 0 ? minutes : hour + minutes;
 
-    return value;
+    // return value;
+    return totalMinutes + " minutes";
   }
 
   function getPercentileCount(breakpoint) {
     switch (breakpoint) {
       case "UPPER":
-        return learnersCompleted.filter((obj) => obj.Percentage > 80).length;
+        return learnersCompleted.filter((obj) => obj.Percentage > 82).length;
       case "MIDDLE":
         return learnersCompleted.filter(
-          (obj) => obj.Percentage <= 80 && obj.Percentage > 70
+          (obj) => obj.Percentage <= 82 && obj.Percentage > 70
         ).length;
       case "LOWER":
         return learnersCompleted.filter((obj) => obj.Percentage <= 70).length;
