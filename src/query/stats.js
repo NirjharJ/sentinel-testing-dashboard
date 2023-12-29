@@ -2,10 +2,13 @@ import {
   SimulationCohortSummaries,
   SimulationModuleInfo,
 } from "../data/globalData";
-import { SimulationModuleActivity } from "../data/simulationModuleActivity";
-import { StudentSummaries } from "../data/studentSummaries";
 
-export function generateStats(selectedProduct, selectedCourse) {
+export function generateStats(
+  selectedProduct,
+  selectedCourse,
+  simulationModuleActivity,
+  studentSummaries
+) {
   if (selectedCourse.length === 0) {
     selectedCourse = SimulationCohortSummaries.filter(
       (obj) => obj.AssignmentID === selectedProduct.AssignmentID
@@ -19,18 +22,31 @@ export function generateStats(selectedProduct, selectedCourse) {
 
   levels.forEach((level) => {
     level.students = [];
-    SimulationModuleActivity.filter(
-      (data) =>
-        data.AssignmentID === selectedProduct.AssignmentID &&
-        data.ModuleID === level.ModuleID
-    ).forEach((student) => {
-      const { CohortID } = StudentSummaries.find(
-        (obj) => obj.StudentID === student.StudentID
-      );
-      if (selectedCourse.includes(CohortID)) {
-        level.students.push(student);
-      }
-    });
+    const toatalScore = level.MaxScore;
+    simulationModuleActivity
+      .filter(
+        (data) =>
+          data.AssignmentID === selectedProduct.AssignmentID &&
+          data.ModuleID === level.ModuleID
+      )
+      .forEach((student) => {
+        // for (let i = 0; i < StudentSummaries.length; i++) {
+        //   const obj = StudentSummaries.at(i);
+        //   if (
+        //     obj.StudentID === student.StudentID &&
+        //     selectedCourse.includes(obj.CohortID)
+        //   )
+        //     level.students.push(student);
+        // }
+        const { CohortID } = studentSummaries.find(
+          (obj) => obj.StudentID === student.StudentID
+        );
+        if (selectedCourse.includes(CohortID)) {
+          student.Percentage = Math.round((student.Score / toatalScore) * 100);
+          // console.log(level, student);
+          level.students.push(student);
+        }
+      });
   });
 
   return { levels };

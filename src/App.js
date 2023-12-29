@@ -1,7 +1,7 @@
 import "./App.css";
 import CheckboxCourse from "./components/CheckboxCourse";
-import ScoreTimeCompletion from "./components/ScoreTimeCompletion";
-import SelectDDL from "./components/SelectDDL";
+import Form from "./components/Form";
+import Statistics from "./components/Statistics";
 import { useQuery } from "./context/QueryContext";
 
 function App() {
@@ -10,8 +10,7 @@ function App() {
     <div style={{ display: "flex", margin: "10px" }}>
       <div>
         <div>
-          <h2>Products</h2>
-          <SelectDDL />
+          <Form />
         </div>
         <div>
           <h2>Courses</h2>
@@ -26,14 +25,7 @@ function App() {
         </h1>
         <button onClick={handleGenerateStats}>Generate Stats</button>
         <div style={{ display: "flex", gap: "10%" }}>
-          <div>
-            <h2>Score, Time, Completion</h2>
-            <ScoreTimeCompletion />
-          </div>
-          <div>
-            <h2>Tertile View</h2>
-            <div></div>
-          </div>
+          <Statistics />
         </div>
       </div>
     </div>
