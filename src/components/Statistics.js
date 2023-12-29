@@ -5,9 +5,8 @@ export default function Statistics() {
   let learnersCompleted;
   function getAverageCompletion(students) {
     return Math.round(
-      (students.filter((obj) => obj.Progress === 100).length /
-        students.length) *
-        100
+      students.reduce((acc, curr) => (acc += curr.Progress), 0) /
+        students.length
     );
   }
 
