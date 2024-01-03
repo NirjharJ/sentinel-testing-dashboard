@@ -60,101 +60,95 @@ export default function Statistics() {
   return (
     <div>
       {stats?.levels?.map((level) => (
-        <div key={level.ModuleID}>
-          <h2>{level.ModuleName}</h2>
-          <div style={{ display: "flex", gap: "2rem" }}>
-            <div>
-              <h4>Score, Time, Completion</h4>
-              <div
-                style={{
-                  border: "2px solid black",
-                  paddingLeft: "5px",
-                  margin: "1px",
-                }}
-              >
-                <p>
-                  <span>Average Completion</span>{" "}
-                  <span>{getAverageCompletion(level.students)}%</span>
-                </p>
-                <p>
-                  <span>Active Learners</span>{" "}
-                  <span>{level.students.length}</span>
-                </p>
-              </div>
-              <div
-                style={{
-                  border: "2px solid black",
-                  paddingLeft: "5px",
-                  margin: "1px",
-                }}
-              >
-                <p>
-                  <span>Average Score</span>{" "}
-                  <span>
+        <div className="card bg-secondary mb-3" key={level.ModuleID}>
+          <div className="card-header fs-4">{level.ModuleName}</div>
+          <div className="d-flex gap-2">
+            <div className="card-body ">
+              <h4 class="card-title">Score, Time & Completion</h4>
+              <ul className="list-group">
+                <li className="list-group-item d-flex justify-content-between align-items-center">
+                  Average Completion
+                  <span className="badge bg-primary rounded-pill">
+                    {getAverageCompletion(level.students)}%
+                  </span>
+                </li>
+                <li className="list-group-item d-flex justify-content-between align-items-center">
+                  Active Learners
+                  <span className="badge bg-primary rounded-pill">
+                    {level.students.length}
+                  </span>
+                </li>
+              </ul>
+              <ul className="list-group">
+                <li className="list-group-item d-flex justify-content-between align-items-center">
+                  Average Score
+                  <span className="badge bg-primary rounded-pill">
                     {getAverageScore(level.students, level.MaxScore)}%
                   </span>
-                </p>
-                <p>
-                  <span>Learners Completed</span>{" "}
-                  <span>{learnersCompleted.length}</span>
-                </p>
-              </div>
-              <div
-                style={{
-                  border: "2px solid black",
-                  paddingLeft: "5px",
-                  margin: "1px",
-                }}
-              >
-                <p>
-                  <span>Average Time</span>{" "}
+                </li>
+                <li className="list-group-item d-flex justify-content-between align-items-center">
+                  Learners Completed
+                  <span className="badge bg-primary rounded-pill">
+                    {learnersCompleted.length}
+                  </span>
+                </li>
+              </ul>
+              <ul className="list-group">
+                <li className="list-group-item d-flex justify-content-between align-items-center">
+                  Average Time
                   {/* <span>{getAverageTime(level.students)}</span> */}
-                  <span>{getAverageTime()}</span>
-                </p>
-                <p>
-                  <span>Learners Completed</span>{" "}
-                  <span>{learnersCompleted.length}</span>
-                </p>
-              </div>
+                  <span className="badge bg-primary rounded-pill">
+                    {getAverageTime()}
+                  </span>
+                </li>
+                <li className="list-group-item d-flex justify-content-between align-items-center">
+                  Learners Completed
+                  <span className="badge bg-primary rounded-pill">
+                    {learnersCompleted.length}
+                  </span>
+                </li>
+              </ul>
             </div>
-            <div>
-              <h4>Tertile View</h4>
-              <div
-                style={{
-                  border: "2px solid black",
-                  paddingLeft: "5px",
-                  margin: "1px",
-                }}
-              >
-                <div>
-                  <span>Learners Completed</span>{" "}
-                  <span>{learnersCompleted.length}</span>
-                </div>
-                <div>
-                  <span>Upper Percentile</span>{" "}
-                  <span>{getPercentile("UPPER")} %</span>
-                </div>
-                <div>
-                  <span>Upper Percentile Learners</span>{" "}
-                  <span>{getPercentileCount("UPPER")}</span>
-                </div>
-                <div>
-                  <span>Middle Percentile</span>{" "}
-                  <span>{getPercentile("MIDDLE")} %</span>
-                </div>
-                <div>
-                  <span>Middle Percentile Learners</span>{" "}
-                  <span>{getPercentileCount("MIDDLE")}</span>
-                </div>
-                <div>
-                  <span>Lower Percentile</span>{" "}
-                  <span>{getPercentile("LOWER")} %</span>
-                </div>
-                <div>
-                  <span>Lower Percentile Learners</span>{" "}
-                  <span>{getPercentileCount("LOWER")}</span>
-                </div>
-              </div>
+            <div className="card-body">
+              <h4 class="card-title">Tertile View</h4>
+              <ul className="list-group">
+                <li className="list-group-item d-flex justify-content-between align-items-center">
+                  Upper Percentile
+                  <span className="badge bg-primary rounded-pill">
+                    {getPercentile("UPPER")} %
+                  </span>
+                </li>
+                <li className="list-group-item d-flex justify-content-between align-items-center">
+                  Upper Percentile Learners
+                  <span className="badge bg-primary rounded-pill mx-2">
+                    {getPercentileCount("UPPER")}
+                  </span>
+                </li>
+                <li className="list-group-item d-flex justify-content-between align-items-center">
+                  Middle Percentile
+                  <span className="badge bg-primary rounded-pill">
+                    {getPercentile("MIDDLE")} %
+                  </span>
+                </li>
+                <li className="list-group-item d-flex justify-content-between align-items-center">
+                  Middle Percentile Learners
+                  <span className="badge bg-primary rounded-pill">
+                    {getPercentileCount("MIDDLE")}
+                  </span>
+                </li>
+                <li className="list-group-item d-flex justify-content-between align-items-center">
+                  Lower Percentile
+                  <span className="badge bg-primary rounded-pill">
+                    {getPercentile("LOWER")} %
+                  </span>
+                </li>
+                <li className="list-group-item d-flex justify-content-between align-items-center">
+                  Lower Percentile Learners
+                  <span className="badge bg-primary rounded-pill">
+                    {getPercentileCount("LOWER")}
+                  </span>
+                </li>
+              </ul>
             </div>
           </div>
         </div>

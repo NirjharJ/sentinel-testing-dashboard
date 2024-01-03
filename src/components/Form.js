@@ -7,9 +7,11 @@ export default function Form() {
   return (
     <form
       onSubmit={(e) => handleSimulationSubmit(e, setInput)}
-      style={{ display: "flex" }}
+      style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}
     >
-      <label htmlFor="simulation">Product Data</label>
+      <label className="fs-3" htmlFor="simulation">
+        Product Data
+      </label>
       <textarea
         id="simulation"
         name="simulation"
@@ -18,7 +20,9 @@ export default function Form() {
         onChange={(e) => setInput(e.target.value)}
         value={input}
       ></textarea>
-      <button type="submit">Submit</button>
+      <button className="btn btn-primary" type="submit">
+        Submit
+      </button>
     </form>
   );
 }

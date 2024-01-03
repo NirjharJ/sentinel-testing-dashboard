@@ -12,18 +12,20 @@ function App() {
         <div>
           <Form />
         </div>
-        <div>
+        <div className="mt-4">
           <h2>Courses</h2>
           <CheckboxCourse />
         </div>
       </div>
       <div style={{ marginLeft: "20px" }}>
-        <h1>
+        <h2 className="mb-2">
           {selectedProduct?.AssignmentID !== null
             ? selectedProduct.AssignmentName
             : "No product selected"}
-        </h1>
-        <button onClick={handleGenerateStats}>Generate Stats</button>
+        </h2>
+        <button className="btn btn-success mb-4" onClick={handleGenerateStats}>
+          Generate Stats
+        </button>
         <div style={{ display: "flex", gap: "10%" }}>
           <Statistics />
         </div>
