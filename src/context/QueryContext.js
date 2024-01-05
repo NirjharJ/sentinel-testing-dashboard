@@ -12,6 +12,8 @@ const intialState = {
   selectedProduct: {
     AssignmentID: null,
     AssignmentName: null,
+    UpperTertile: null,
+    MiddleTertile: null,
   },
   selectedCourse: [],
   stats: {},
@@ -95,7 +97,12 @@ function QueryContextProvider({ children }) {
     dispatch({
       type: "setInitialState",
       payload: {
-        selectedProduct: { AssignmentID, AssignmentName },
+        selectedProduct: {
+          AssignmentID,
+          AssignmentName,
+          Upper: Number(e.target[1].value),
+          Middle: Number(e.target[2].value),
+        },
         SimulationModuleActivity,
         StudentSummaries,
       },

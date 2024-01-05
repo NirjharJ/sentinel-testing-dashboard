@@ -2,7 +2,7 @@ import { useQuery } from "../context/QueryContext";
 import CardBodyWrapper from "./CardBodyWrapper";
 
 export default function Statistics() {
-  const { stats } = useQuery();
+  const { selectedProduct, stats } = useQuery();
   let learnersCompleted;
   function getAverageCompletion(students) {
     return Math.round(
@@ -40,13 +40,19 @@ export default function Statistics() {
   function getPercentileCount(breakpoint) {
     switch (breakpoint) {
       case "UPPER":
-        return learnersCompleted.filter((obj) => obj.Percentage > 82).length;
+        return learnersCompleted.filter(
+          (obj) => obj.Percentage >= selectedProduct?.Upper
+        ).length;
       case "MIDDLE":
         return learnersCompleted.filter(
-          (obj) => obj.Percentage <= 82 && obj.Percentage > 70
+          (obj) =>
+            obj.Percentage >= selectedProduct?.Middle &&
+            obj.Percentage < selectedProduct?.Upper
         ).length;
       case "LOWER":
-        return learnersCompleted.filter((obj) => obj.Percentage <= 70).length;
+        return learnersCompleted.filter(
+          (obj) => obj.Percentage < selectedProduct?.Middle
+        ).length;
       default:
         throw new Error("Unknown Breakpoint");
     }
