@@ -1,4 +1,5 @@
 import { useQuery } from "../context/QueryContext";
+import CardBodyWrapper from "./CardBodyWrapper";
 
 export default function Statistics() {
   const { stats } = useQuery();
@@ -63,8 +64,7 @@ export default function Statistics() {
         <div className="card bg-secondary mb-3" key={level.ModuleID}>
           <div className="card-header fs-4">{level.ModuleName}</div>
           <div className="d-flex gap-2">
-            <div className="card-body ">
-              <h4 class="card-title">Score, Time & Completion</h4>
+            <CardBodyWrapper title="Score, Time & Completion">
               <ul className="list-group">
                 <li className="list-group-item d-flex justify-content-between align-items-center">
                   Average Completion
@@ -96,7 +96,6 @@ export default function Statistics() {
               <ul className="list-group">
                 <li className="list-group-item d-flex justify-content-between align-items-center">
                   Average Time
-                  {/* <span>{getAverageTime(level.students)}</span> */}
                   <span className="badge bg-primary rounded-pill">
                     {getAverageTime()}
                   </span>
@@ -108,9 +107,8 @@ export default function Statistics() {
                   </span>
                 </li>
               </ul>
-            </div>
-            <div className="card-body">
-              <h4 class="card-title">Tertile View</h4>
+            </CardBodyWrapper>
+            <CardBodyWrapper title="Tertile View">
               <ul className="list-group">
                 <li className="list-group-item d-flex justify-content-between align-items-center">
                   Upper Percentile
@@ -149,7 +147,7 @@ export default function Statistics() {
                   </span>
                 </li>
               </ul>
-            </div>
+            </CardBodyWrapper>
           </div>
         </div>
       ))}
