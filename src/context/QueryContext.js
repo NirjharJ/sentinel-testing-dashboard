@@ -1,11 +1,11 @@
-import { createContext, useContext, useEffect, useReducer } from "react";
+import { createContext, useContext, useReducer } from "react";
 import { generateStats } from "../query/stats";
-import { SimulationCohortSummaries } from "../data/globalData";
 
 const QueryContext = createContext();
 
 const intialState = {
-  // allProduct: [],
+  simulationCohortSummaries: [],
+  simulationModuleInfo: [],
   simulationModuleActivity: [],
   studentSummaries: [],
   allCourseInProduct: [],
@@ -22,17 +22,9 @@ const intialState = {
 function reducer(state, action) {
   switch (action.type) {
     case "setInitialState":
-      return {
-        ...state,
-        selectedProduct: action.payload.selectedProduct,
-        simulationModuleActivity: action.payload.SimulationModuleActivity,
-        studentSummaries: action.payload.StudentSummaries,
-      };
-    case "setAllCourses":
-      return { ...state, allCourseInProduct: action.payload };
-    case "productSelected":
-      const tempCourse = SimulationCohortSummaries.filter(
-        (obj) => obj.AssignmentID === action.payload.AssignmentID
+      const courses = action.payload.SimulationCohortSummaries.filter(
+        (obj) =>
+          obj.AssignmentID === action.payload.selectedProduct.AssignmentID
       ).map((obj) => {
         return {
           CohortID: obj.CohortID,
@@ -40,6 +32,26 @@ function reducer(state, action) {
           StudentCount: obj.StudentCount,
         };
       });
+
+      return {
+        ...state,
+        simulationCohortSummaries: action.payload.SimulationCohortSummaries,
+        simulationModuleInfo: action.payload.SimulationModuleInfo,
+        selectedProduct: action.payload.selectedProduct,
+        simulationModuleActivity: action.payload.SimulationModuleActivity,
+        studentSummaries: action.payload.StudentSummaries,
+        allCourseInProduct: courses,
+      };
+    case "productSelected":
+      const tempCourse = state.simulationCohortSummaries
+        .filter((obj) => obj.AssignmentID === action.payload.AssignmentID)
+        .map((obj) => {
+          return {
+            CohortID: obj.CohortID,
+            CohortName: obj.CohortName,
+            StudentCount: obj.StudentCount,
+          };
+        });
       return {
         ...state,
         selectedProduct: action.payload,
@@ -68,6 +80,8 @@ function reducer(state, action) {
 function QueryContextProvider({ children }) {
   const [
     {
+      simulationCohortSummaries,
+      simulationModuleInfo,
       simulationModuleActivity,
       studentSummaries,
       allProduct,
@@ -79,16 +93,19 @@ function QueryContextProvider({ children }) {
     dispatch,
   ] = useReducer(reducer, intialState);
 
-  function handleSimulationSubmit(e, setInput) {
+  function handleSimulationSubmit(e, setCohort, setModule) {
     e.preventDefault();
-    const inputString = e.target[0].value;
-    if (inputString.length === 0) {
+    const cohortString = e.target[0].value;
+    const moduleString = e.target[1].value;
+    if (cohortString.length === 0 || moduleString.length === 0) {
       console.log("input data format incorrect");
       return;
     }
-    const inputObj = JSON.parse(inputString);
-    const { SimulationModuleActivity, StudentSummaries } = inputObj;
-    const { AssignmentID } = SimulationModuleActivity.at(0);
+    const cohortObj = JSON.parse(cohortString);
+    const { SimulationCohortSummaries, SimulationModuleInfo } = cohortObj;
+    const moduleObj = JSON.parse(moduleString);
+    const { SimulationModuleActivity, StudentSummaries } = moduleObj;
+    const { AssignmentID } = SimulationModuleInfo.at(0);
 
     const { AssignmentName } = SimulationCohortSummaries.find(
       (obj) => obj.AssignmentID === AssignmentID
@@ -100,15 +117,18 @@ function QueryContextProvider({ children }) {
         selectedProduct: {
           AssignmentID,
           AssignmentName,
-          Upper: Number(e.target[1].value),
-          Middle: Number(e.target[2].value),
+          Upper: Number(e.target[2].value),
+          Middle: Number(e.target[3].value),
         },
+        SimulationCohortSummaries,
+        SimulationModuleInfo,
         SimulationModuleActivity,
         StudentSummaries,
       },
     });
 
-    setInput("");
+    setCohort("");
+    setModule("");
 
     console.log("product updated successfully");
   }
@@ -125,6 +145,8 @@ function QueryContextProvider({ children }) {
     dispatch({
       type: "generateStats",
       payload: generateStats(
+        simulationCohortSummaries,
+        simulationModuleInfo,
         selectedProduct,
         selectedCourse,
         simulationModuleActivity,
@@ -132,26 +154,6 @@ function QueryContextProvider({ children }) {
       ),
     });
   }
-
-  useEffect(
-    function () {
-      const courses = SimulationCohortSummaries.filter(
-        (obj) => obj.AssignmentID === selectedProduct.AssignmentID
-      ).map((obj) => {
-        return {
-          CohortID: obj.CohortID,
-          CohortName: obj.CohortName,
-          StudentCount: obj.StudentCount,
-        };
-      });
-
-      dispatch({
-        type: "setAllCourses",
-        payload: courses,
-      });
-    },
-    [selectedProduct]
-  );
 
   return (
     <QueryContext.Provider

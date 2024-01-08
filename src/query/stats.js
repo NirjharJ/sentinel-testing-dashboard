@@ -1,21 +1,18 @@
-import {
-  SimulationCohortSummaries,
-  SimulationModuleInfo,
-} from "../data/globalData";
-
 export function generateStats(
+  simulationCohortSummaries,
+  simulationModuleInfo,
   selectedProduct,
   selectedCourse,
   simulationModuleActivity,
   studentSummaries
 ) {
   if (selectedCourse.length === 0) {
-    selectedCourse = SimulationCohortSummaries.filter(
-      (obj) => obj.AssignmentID === selectedProduct.AssignmentID
-    ).map((obj) => obj.CohortID);
+    selectedCourse = simulationCohortSummaries
+      .filter((obj) => obj.AssignmentID === selectedProduct.AssignmentID)
+      .map((obj) => obj.CohortID);
   }
 
-  const levels = SimulationModuleInfo.filter(
+  const levels = simulationModuleInfo.filter(
     (obj) =>
       obj.AssignmentID === selectedProduct.AssignmentID && obj.MaxScore > 0
   );

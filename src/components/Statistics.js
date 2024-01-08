@@ -2,12 +2,19 @@ import { useQuery } from "../context/QueryContext";
 import CardBodyWrapper from "./CardBodyWrapper";
 
 export default function Statistics() {
-  const { selectedProduct, stats } = useQuery();
+  const { allCourseInProduct, selectedProduct, stats } = useQuery();
+  let activeLearnersCount;
   let learnersCompleted;
   function getAverageCompletion(students) {
+    if (allCourseInProduct.length === 0) return;
+
+    activeLearnersCount = allCourseInProduct.reduce(
+      (acc, curr) => acc + curr.StudentCount,
+      0
+    );
     return Math.round(
       students.reduce((acc, curr) => (acc += curr.Progress), 0) /
-        students.length
+        activeLearnersCount
     );
   }
 
@@ -81,7 +88,7 @@ export default function Statistics() {
                 <li className="list-group-item d-flex justify-content-between align-items-center">
                   Active Learners
                   <span className="badge bg-primary rounded-pill">
-                    {level.students.length}
+                    {activeLearnersCount}
                   </span>
                 </li>
               </ul>
