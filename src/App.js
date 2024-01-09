@@ -27,7 +27,7 @@ function App() {
           Generate Stats
         </button>
         <div style={{ display: "flex", gap: "10%" }}>
-          <Statistics />
+          {selectedProduct && <Statistics />}
         </div>
       </div>
     </div>

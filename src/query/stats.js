@@ -19,7 +19,8 @@ export function generateStats(
 
   levels.forEach((level) => {
     level.students = [];
-    const toatalScore = level.MaxScore;
+    const totalScore = level.MaxScore;
+
     simulationModuleActivity
       .filter(
         (data) =>
@@ -27,8 +28,8 @@ export function generateStats(
           data.ModuleID === level.ModuleID
       )
       .forEach((student) => {
-        // for (let i = 0; i < StudentSummaries.length; i++) {
-        //   const obj = StudentSummaries.at(i);
+        // for (let i = 0; i < studentSummaries.length; i++) {
+        //   const obj = studentSummaries.at(i);
         //   if (
         //     obj.StudentID === student.StudentID &&
         //     selectedCourse.includes(obj.CohortID)
@@ -39,7 +40,7 @@ export function generateStats(
           (obj) => obj.StudentID === student.StudentID
         );
         if (selectedCourse.includes(CohortID)) {
-          student.Percentage = Math.round((student.Score / toatalScore) * 100);
+          student.Percentage = Math.round((student.Score / totalScore) * 100);
           // console.log(level, student);
           level.students.push(student);
         }
@@ -48,5 +49,3 @@ export function generateStats(
 
   return { levels };
 }
-
-export function computeAverageCompletion() {}

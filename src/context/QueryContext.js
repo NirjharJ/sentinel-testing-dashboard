@@ -61,7 +61,7 @@ function reducer(state, action) {
       let updatedSelectedCourse = [];
       if (state.selectedCourse.includes(action.payload)) {
         updatedSelectedCourse = state.selectedCourse.filter(
-          (id) => id != action.payload
+          (id) => id !== action.payload
         );
       } else {
         updatedSelectedCourse = [...state.selectedCourse, action.payload];
@@ -84,7 +84,6 @@ function QueryContextProvider({ children }) {
       simulationModuleInfo,
       simulationModuleActivity,
       studentSummaries,
-      allProduct,
       allCourseInProduct,
       selectedProduct,
       selectedCourse,
@@ -158,9 +157,9 @@ function QueryContextProvider({ children }) {
   return (
     <QueryContext.Provider
       value={{
-        allProduct,
         allCourseInProduct,
         selectedProduct,
+        selectedCourse,
         stats,
         handleSimulationSubmit,
         handleSelectCourse,

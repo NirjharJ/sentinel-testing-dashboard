@@ -4,7 +4,7 @@ export default function CardBodyWrapper({
 }) {
   return (
     <div className="card-body">
-      <h4 class="card-title">{title}</h4>
+      <h4 className="card-title">{title}</h4>
       {children}
     </div>
   );

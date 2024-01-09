@@ -2,16 +2,28 @@ import { useQuery } from "../context/QueryContext";
 import CardBodyWrapper from "./CardBodyWrapper";
 
 export default function Statistics() {
-  const { allCourseInProduct, selectedProduct, stats } = useQuery();
-  let activeLearnersCount;
-  let learnersCompleted;
+  const { allCourseInProduct, selectedCourse, selectedProduct, stats } =
+    useQuery();
+  let activeLearnersCount = 0;
+  let learnersCompleted = 0;
   function getAverageCompletion(students) {
     if (allCourseInProduct.length === 0) return;
+    activeLearnersCount = 0;
+    if (selectedCourse.length === 0) {
+      console.log("aa gaya");
+      activeLearnersCount = allCourseInProduct.reduce(
+        (acc, curr) => acc + curr.StudentCount,
+        0
+      );
+      console.log(activeLearnersCount);
+    } else {
+      selectedCourse.forEach((CohortID) => {
+        activeLearnersCount += allCourseInProduct.find(
+          (cohort) => cohort.CohortID === CohortID
+        ).StudentCount;
+      });
+    }
 
-    activeLearnersCount = allCourseInProduct.reduce(
-      (acc, curr) => acc + curr.StudentCount,
-      0
-    );
     return Math.round(
       students.reduce((acc, curr) => (acc += curr.Progress), 0) /
         activeLearnersCount
@@ -33,14 +45,6 @@ export default function Statistics() {
       learnersCompleted.reduce((acc, curr) => (acc += curr.MinutesSpent), 0) /
         learnersCompleted.length
     );
-
-    const hour = Math.floor(totalMinutes / 60) + " hour ";
-    const minutes = (totalMinutes % 60) + " minutes";
-
-    const value =
-      Math.floor(totalMinutes / 60) === 0 ? minutes : hour + minutes;
-
-    // return value;
     return totalMinutes + " minutes";
   }
 
