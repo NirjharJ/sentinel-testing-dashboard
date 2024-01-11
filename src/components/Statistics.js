@@ -95,6 +95,12 @@ export default function Statistics() {
                     {activeLearnersCount}
                   </span>
                 </li>
+                {/* <li className="list-group-item d-flex justify-content-between align-items-center">
+                  Table Data
+                  <span className="badge bg-primary rounded-pill">
+                    {level.students.length}
+                  </span>
+                </li> */}
               </ul>
               <ul className="list-group">
                 <li className="list-group-item d-flex justify-content-between align-items-center">
