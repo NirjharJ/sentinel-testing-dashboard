@@ -2,20 +2,25 @@ import { useQuery } from "../context/QueryContext";
 import CardBodyWrapper from "./CardBodyWrapper";
 
 export default function Statistics() {
-  const { allCourseInProduct, selectedCourse, selectedProduct, stats } =
-    useQuery();
+  const {
+    allCourseInProduct,
+    selectedCourse,
+    selectedProduct,
+    stats,
+    studentSummaries,
+    simulationCohortSummaries,
+  } = useQuery();
   let activeLearnersCount = 0;
   let learnersCompleted = 0;
+  let learnersEnrolledInMultipleCohort = [];
   function getAverageCompletion(students) {
     if (allCourseInProduct.length === 0) return;
     activeLearnersCount = 0;
     if (selectedCourse.length === 0) {
-      console.log("aa gaya");
       activeLearnersCount = allCourseInProduct.reduce(
         (acc, curr) => acc + curr.StudentCount,
         0
       );
-      console.log(activeLearnersCount);
     } else {
       selectedCourse.forEach((CohortID) => {
         activeLearnersCount += allCourseInProduct.find(
@@ -74,6 +79,52 @@ export default function Statistics() {
     return Math.round((count / learnersCompleted.length) * 100);
   }
 
+  function getLearnersEnrolledInMultipleCohort() {
+    const studentData = studentSummaries.reduce((acc, curr) => {
+      if (acc[curr.StudentID.toString()] === undefined) {
+        acc[curr.StudentID.toString()] = new Array(curr);
+      } else {
+        acc[curr.StudentID.toString()].push(curr);
+      }
+      return acc;
+    }, {});
+
+    const filteredData = [];
+    for (const [key, value] of Object.entries(studentData)) {
+      if (value.length > 1) {
+        filteredData.push(value);
+      }
+    }
+
+    for (let i = 0; i < filteredData.length; ++i) {
+      const studentData = filteredData.at(i);
+      learnersEnrolledInMultipleCohort.push({
+        FirstName: studentData[0].FirstName,
+        LastName: studentData[0].LastName,
+        Cohorts: [],
+      });
+      for (let j = 0; j < studentData.length; ++j) {
+        const objCohort = studentData.at(j);
+        learnersEnrolledInMultipleCohort[i].Cohorts.push(
+          simulationCohortSummaries.find(
+            (obj) => obj.CohortID === objCohort.CohortID
+          ).CohortName
+        );
+      }
+    }
+    console.log("Learners enrolled in multiple cohort");
+    console.log(learnersEnrolledInMultipleCohort);
+    return learnersEnrolledInMultipleCohort;
+  }
+
+  function copyDetails() {
+    const htmlText = [...document.getElementsByClassName("copy-data")].map(
+      (obj) => obj.innerText
+    );
+    navigator.clipboard.writeText(htmlText);
+    // console.log(htmlText);
+  }
+
   console.log(stats);
   return (
     <div>
@@ -95,12 +146,12 @@ export default function Statistics() {
                     {activeLearnersCount}
                   </span>
                 </li>
-                {/* <li className="list-group-item d-flex justify-content-between align-items-center">
+                <li className="list-group-item d-flex justify-content-between align-items-center">
                   Table Data
                   <span className="badge bg-primary rounded-pill">
                     {level.students.length}
                   </span>
-                </li> */}
+                </li>
               </ul>
               <ul className="list-group">
                 <li className="list-group-item d-flex justify-content-between align-items-center">
@@ -171,6 +222,29 @@ export default function Statistics() {
                 </li>
               </ul>
             </CardBodyWrapper>
+          </div>
+          <div className="alert alert-dismissible alert-danger mx-4">
+            <div className="d-flex justify-content-between align-self-center">
+              <h5>Learners Enrolled In Multiple Cohort</h5>
+              <button className="btn btn-success" onClick={copyDetails}>
+                Copy Details
+              </button>
+            </div>
+            <ul className="alert alert-dismissible alert-danger copy-data">
+              {getLearnersEnrolledInMultipleCohort().map((obj, i) => (
+                <p>
+                  <span className="fw-bold">{i + 1}. </span>
+                  {obj.FirstName} {obj.LastName} enrolled in{" "}
+                  {obj.Cohorts.length} cohort :{" "}
+                  {obj.Cohorts.map((c, j, arr) => (
+                    <span key={j}>
+                      {c}
+                      {j + 1 === arr.length ? "." : ", "}
+                    </span>
+                  ))}
+                </p>
+              ))}
+            </ul>
           </div>
         </div>
       ))}

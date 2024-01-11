@@ -160,6 +160,8 @@ function QueryContextProvider({ children }) {
         allCourseInProduct,
         selectedProduct,
         selectedCourse,
+        simulationCohortSummaries,
+        studentSummaries,
         stats,
         handleSimulationSubmit,
         handleSelectCourse,
